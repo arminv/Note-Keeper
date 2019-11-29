@@ -2,8 +2,7 @@
   <v-container fluid class="noteContainer">
     <dropdown></dropdown>
     <br />
-    <!-- <p>{{ $store.state.notes }}</p>
-    <p>{{ $store.state.dates }}</p> -->
+    <!-- TODO: add a textfield for note subject: -->
     <v-textarea
       :clearable="clearable"
       :filled="filled"

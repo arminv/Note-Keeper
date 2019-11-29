@@ -86,6 +86,7 @@
 
 <style>
   #inspire {
+    /* TODO: blur the background: */
     background: url('./assets/background_1.jpeg') center center;
   }
 </style>
