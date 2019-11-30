@@ -29,7 +29,8 @@
         }}
       </v-expansion-panel-header>
       <v-expansion-panel-content>
-        {{ note }}
+        <!-- preserve multi-line notes (i.e. line spacing): -->
+        <div style="white-space: pre">{{ note }} </div>
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
