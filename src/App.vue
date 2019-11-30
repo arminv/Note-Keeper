@@ -74,11 +74,9 @@
     },
     methods: {
       toggleMode() {
-        if (this.$vuetify.theme.dark === true) {
-          this.$vuetify.theme.dark = false;
-        } else {
-          this.$vuetify.theme.dark = true;
-        }
+        this.$vuetify.theme.dark === true
+          ? (this.$vuetify.theme.dark = false)
+          : (this.$vuetify.theme.dark = true);
       }
     }
   };
@@ -86,7 +84,6 @@
 
 <style>
   #inspire {
-    /* TODO: blur the background: */
-    background: url('./assets/background_1.jpeg') center center;
+    background: url('./assets/background_1.jpg') center center;
   }
 </style>
