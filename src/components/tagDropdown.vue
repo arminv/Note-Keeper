@@ -3,25 +3,27 @@
     <!-- TODO: add a new tag to the list: -->
     <v-form ref="form">
       <v-text-field
+        v-model="newTag"
+        @keydown.enter.prevent="createNewTag(newTag)"
         label="Add A New Tag : "
         placeholder="Press enter to add"
         :outlined="outlined"
         :rounded="rounded"
         clearable
         counter
-        v-model="newTag"
-        @keydown.enter.prevent="submit" 
       >
       </v-text-field>
       <!-- <v-btn class="mr-4" @click="submit">submit</v-btn> -->
     </v-form>
 
-<br />
+    <!-- <p>{{ $store.state.tags }}</p> -->
+
+    <br />
     <!-- TODO: add selected tags to the current note being edited: -->
     <v-select
       v-model="selectedLang"
+      :items="$store.state.tags"
       label="Select Tags"
-      :items="langs"
       :outlined="outlined"
       :rounded="rounded"
       multiple
@@ -71,31 +73,33 @@
         </v-list-item>
       </template>
     </v-select>
+
+    <v-overlay :value="overlay" opacity="0.90" dark>
+      <v-btn icon @click="overlay = false">
+        <h2>
+          Tag is empty! Add something
+          <v-icon>
+            fas fa-window-close
+          </v-icon>
+        </h2>
+      </v-btn>
+    </v-overlay>
   </v-container>
 </template>
 
 <script>
   export default {
     data: () => ({
-      langs: [
-        'JavaScript',
-        'Vue',
-        'Node',
-        'React',
-        'Python',
-        'MongoDB',
-        'Feathers',
-        'Express'
-      ],
       selectedLang: [],
       outlined: true,
       rounded: true,
-      newTag: ''
+      newTag: '',
+      overlay: false
     }),
 
     computed: {
       likesAllLang() {
-        return this.selectedLang.length === this.langs.length;
+        return this.selectedLang.length === this.$store.state.tags.length;
       },
       likesSomeLang() {
         return this.selectedLang.length > 0 && !this.likesAllLang;
@@ -108,18 +112,22 @@
     },
 
     methods: {
+      createNewTag() {
+        if (this.newTag === '') {
+          this.overlay = true;
+          return;
+        }
+        this.$store.dispatch('addTag', this.newTag);
+        this.newTag = '';
+      },
       toggle() {
         this.$nextTick(() => {
           if (this.likesAllLang) {
             this.selectedLang = [];
           } else {
-            this.selectedLang = this.langs.slice();
+            this.selectedLang = this.$store.state.tags.slice();
           }
         });
-      },
-      submit(){
-        this.langs.unshift(this.newTag);
-        this.newTag = '';
       }
     }
   };

@@ -9,7 +9,17 @@ Vue.use(Vuex)
 const state = {
   notes: [],
   dates: [],
-  counter: 0
+  counter: 0,
+  tags: [
+    'JavaScript',
+    'Vue',
+    'Node',
+    'React',
+    'Python',
+    'MongoDB',
+    'Feathers',
+    'Express'
+  ]
 }
 
 const mutations = {
@@ -27,6 +37,10 @@ const mutations = {
   ADD_DATE(state, payload) {
     let newTimeStamp = payload;
     state.dates.push(newTimeStamp);
+  },
+  ADD_TAG(state, payload) {
+    let tag = payload;
+    state.tags.unshift(tag);
   }
 }
 
@@ -39,12 +53,16 @@ const actions = {
   },
   addDate(context, payload) {
     context.commit('ADD_DATE', payload);
+  },
+  addTag(context, payload) {
+    context.commit('ADD_TAG', payload);
   }
 }
 
 const getters = {
   getNotes: state => state.notes,
   getDates: state => state.dates,
+  getTags: state => state.tags,
   getNoteCount: state => state.notes.length,
   getCounter: state => state.counter,
 }
@@ -65,6 +83,9 @@ new Vue({
     },
     dates() {
       return this.$store.getters.getDates;
+    },
+    tags() {
+      return this.$store.getters.getTags;
     },
     counter() {
       return this.$store.getters.getCounter;
