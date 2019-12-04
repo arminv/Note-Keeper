@@ -7,7 +7,7 @@
       :key="index"
     >
       <div>
-        <!-- TODO: Add an edit button & functionality for each note: -->
+        <!-- TODO: Add an edit button + functionality for each note: -->
         <v-btn
           class="float-right mx-2"
           fab

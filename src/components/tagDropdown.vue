@@ -106,14 +106,6 @@
       }
     },
     methods: {
-      createNewTag() {
-        if (this.newTag === '') {
-          this.overlay = true;
-          return;
-        }
-        this.$store.dispatch('addTag', this.newTag);
-        this.newTag = '';
-      },
       toggle() {
         this.$nextTick(() => {
           if (this.likesAllLang) {
@@ -122,7 +114,14 @@
             this.selectedTag = this.$store.state.tags.slice();
           }
         });
-        // alert('heyyy');
+      },
+      createNewTag() {
+        if (this.newTag === '') {
+          this.overlay = true;
+          return;
+        }
+        this.$store.dispatch('addTag', this.newTag);
+        this.newTag = '';
       },
       emitSelection(selectedTag) {
         this.$emit('selectionListen', selectedTag);

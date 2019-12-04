@@ -41,7 +41,6 @@
             <br />
             <note-entry />
             <br />
-            <!-- {{ $store.state.notes }} {{ $store.state.dates }} -->
             <br />
           </v-container>
         </v-container>
@@ -61,23 +60,23 @@
     props: {
       source: String
     },
-    data: () => ({
-      drawer: null,
-      counter: 0
-    }),
     components: {
       Notes,
       NoteEntry
     },
-    created() {
-      this.$vuetify.theme.dark = true;
-    },
+    data: () => ({
+      drawer: null,
+      counter: 0
+    }),
     methods: {
       toggleMode() {
         this.$vuetify.theme.dark === true
           ? (this.$vuetify.theme.dark = false)
           : (this.$vuetify.theme.dark = true);
       }
+    },
+    created() {
+      this.$vuetify.theme.dark = true;
     }
   };
 </script>
