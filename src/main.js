@@ -19,7 +19,8 @@ const state = {
     'MongoDB',
     'Feathers',
     'Express'
-  ]
+  ],
+  selectedTags: []
 }
 
 const mutations = {
@@ -41,6 +42,10 @@ const mutations = {
   ADD_TAG(state, payload) {
     let tag = payload;
     state.tags.unshift(tag);
+  },
+  ADD_SELECTED_TAG(state, payload) {
+    let selectedTag = payload;
+    state.selectedTags.push(selectedTag);
   }
 }
 
@@ -56,13 +61,17 @@ const actions = {
   },
   addTag(context, payload) {
     context.commit('ADD_TAG', payload);
-  }
+  },
+  addSelectedTag(context, payload) {
+    context.commit('ADD_SELECTED_TAG', payload);
+  },
 }
 
 const getters = {
   getNotes: state => state.notes,
   getDates: state => state.dates,
   getTags: state => state.tags,
+  getSelectedTags: state => state.selectedTags,
   getNoteCount: state => state.notes.length,
   getCounter: state => state.counter,
 }
@@ -85,6 +94,9 @@ new Vue({
       return this.$store.getters.getDates;
     },
     tags() {
+      return this.$store.getters.getTags;
+    },
+    selectedTags() {
       return this.$store.getters.getTags;
     },
     counter() {

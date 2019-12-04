@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="noteContainer">
-    <dropdown></dropdown>
+    <dropdown v-on:selectionListen="addSelectedTags"></dropdown>
     <br />
     <!-- TODO: add a textfield for note subject: -->
     <v-textarea
@@ -14,7 +14,6 @@
       v-model="note"
       counter="true"
     ></v-textarea>
-
     <div class="text-center">
       <v-btn rounded color="primary" dark @click="createNewNote">
         Save Note
@@ -42,14 +41,16 @@
   import Dropdown from './tagDropdown.vue';
 
   export default {
+    name: 'NoteEntry',
     data: function() {
       return {
+        note: '',
+        date: new Date().toISOString().substr(0, 10),
+        selectedTags: [],
         clearable: true,
         filled: true,
         outlined: true,
-        note: '',
-        overlay: false,
-        date: new Date().toISOString().substr(0, 10)
+        overlay: false
       };
     },
     methods: {
@@ -60,11 +61,15 @@
         }
         this.$store.dispatch('addNote', this.note);
         this.$store.dispatch('addDate', this.date);
+        this.$store.dispatch('addSelectedTag', this.selectedTags);
         this.note = '';
         this.date = new Date().toISOString().substr(0, 10);
+        this.selectedTags = [];
+      },
+      addSelectedTags(selection) {
+        this.selectedTags = selection;
       }
     },
-    name: 'NoteEntry',
     components: {
       Dropdown
     }

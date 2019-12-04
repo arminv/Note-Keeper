@@ -1,6 +1,5 @@
 <template>
   <v-container fluid>
-    <!-- TODO: add a new tag to the list: -->
     <v-form ref="form">
       <v-text-field
         v-model="newTag"
@@ -13,17 +12,13 @@
         counter
       >
       </v-text-field>
-      <!-- <v-btn class="mr-4" @click="submit">submit</v-btn> -->
     </v-form>
-
-    <!-- <p>{{ $store.state.tags }}</p> -->
-
     <br />
-    <!-- TODO: add selected tags to the current note being edited: -->
     <v-select
-      v-model="selectedLang"
+      v-model="selectedTag"
+      v-on:change="emitSelection(selectedTag)"
       :items="$store.state.tags"
-      label="Select Tags"
+      label="Select Tags :"
       :outlined="outlined"
       :rounded="rounded"
       multiple
@@ -31,9 +26,9 @@
       <template v-slot:prepend-item>
         <v-list-item ripple @click="toggle">
           <v-list-item-action>
-            <v-icon :color="selectedLang.length > 0 ? 'indigo darken-4' : ''">{{
-              icon
-            }}</v-icon>
+            <v-icon :color="selectedTag.length > 0 ? 'indigo darken-4' : ''">
+              {{ icon }}
+            </v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Select All</v-list-item-title>
@@ -57,9 +52,9 @@
 
           <v-list-item-content v-else-if="likesSomeLang">
             <v-list-item-title>Lang Count</v-list-item-title>
-            <v-list-item-subtitle>{{
-              selectedLang.length
-            }}</v-list-item-subtitle>
+            <v-list-item-subtitle>
+              {{ selectedTag.length }}
+            </v-list-item-subtitle>
           </v-list-item-content>
 
           <v-list-item-content v-else>
@@ -90,7 +85,7 @@
 <script>
   export default {
     data: () => ({
-      selectedLang: [],
+      selectedTag: [],
       outlined: true,
       rounded: true,
       newTag: '',
@@ -99,10 +94,10 @@
 
     computed: {
       likesAllLang() {
-        return this.selectedLang.length === this.$store.state.tags.length;
+        return this.selectedTag.length === this.$store.state.tags.length;
       },
       likesSomeLang() {
-        return this.selectedLang.length > 0 && !this.likesAllLang;
+        return this.selectedTag.length > 0 && !this.likesAllLang;
       },
       icon() {
         if (this.likesAllLang) return 'mdi-close-box';
@@ -110,7 +105,6 @@
         return 'mdi-checkbox-blank-outline';
       }
     },
-
     methods: {
       createNewTag() {
         if (this.newTag === '') {
@@ -123,11 +117,15 @@
       toggle() {
         this.$nextTick(() => {
           if (this.likesAllLang) {
-            this.selectedLang = [];
+            this.selectedTag = [];
           } else {
-            this.selectedLang = this.$store.state.tags.slice();
+            this.selectedTag = this.$store.state.tags.slice();
           }
         });
+        // alert('heyyy');
+      },
+      emitSelection(selectedTag) {
+        this.$emit('selectionListen', selectedTag);
       }
     }
   };
