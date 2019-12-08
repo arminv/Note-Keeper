@@ -2,6 +2,7 @@
   <v-container fluid class="noteContainer">
     <dropdown v-on:selectionListen="addSelectedTags"></dropdown>
     <br />
+    <!-- TODO: add a rich text editor (e.g. https://github.com/scrumpy/tiptap): -->
     <!-- TODO: add a textfield for note subject: -->
     <v-textarea
       :clearable="clearable"

@@ -11,6 +11,7 @@ const router = new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [{
+        // TODO: add route for / and also not found:
             path: '/login',
             name: 'Login',
             component: Login
