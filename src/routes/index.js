@@ -11,7 +11,10 @@ const router = new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [{
-        // TODO: add route for / and also not found:
+            path: '/',
+            redirect: '/login'
+        },
+        {
             path: '/login',
             name: 'Login',
             component: Login
@@ -29,6 +32,12 @@ const router = new Router({
                 requiresAuth: true
             }
         }
+        // TODO: Add a not found component:
+        // ,{
+        //     path: '*',
+        //     name: 'NotFound',
+        //     component: NotFound
+        // }
     ]
 });
 
