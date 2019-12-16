@@ -1,4 +1,8 @@
-# my-app
+# Note Keeper App:
+
+NOTE: Add your own Firebase project and configuration in ./src/main.js file.
+
+I am also using Vuefire to create bindings between the remote db and the app.
 
 ## Project setup
 ```
