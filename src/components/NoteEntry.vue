@@ -22,7 +22,7 @@
     </div>
     <br />
     <v-row justify="center">
-      <v-date-picker v-model="date"></v-date-picker>
+      <v-date-picker v-model="date">Pick A Date For The Note</v-date-picker>
     </v-row>
 
     <v-overlay :value="overlay" opacity="0.90" dark>
@@ -40,11 +40,14 @@
 
 <script>
   import Dropdown from './tagDropdown.vue';
+  import firebase from 'firebase';
+  import { db } from '../main';
 
   export default {
     name: 'NoteEntry',
-    data: function() {
+    data: () => {
       return {
+        docs: null,
         note: '',
         date: new Date().toISOString().substr(0, 10),
         selectedTags: [],
@@ -54,31 +57,49 @@
         overlay: false
       };
     },
+    firestore() {
+      return {
+        docs: db.collection('users').doc(firebase.auth().currentUser.uid)
+      };
+    },
+    components: {
+      Dropdown
+    },
     methods: {
       createNewNote() {
         if (this.note === '') {
           this.overlay = true;
           return;
         }
-        this.$store.dispatch('addNote', this.note);
-        this.$store.dispatch('addDate', this.date);
-        this.$store.dispatch('addSelectedTag', this.selectedTags);
-        this.note = '';
-        this.date = new Date().toISOString().substr(0, 10);
-        this.selectedTags = [];
+        let ref = db.collection('users').doc(firebase.auth().currentUser.uid);
+        return db.runTransaction(transaction => {
+          return transaction.get(ref).then(doc => {
+            const notes = doc.data().notes;
+            const dates = doc.data().dates;
+            const selectedTags = doc.data().selectedTags;
+            notes.push(this.note);
+            dates.push(this.date);
+            let myIndex = Object.keys(this.docs.selectedTags).length;
+            selectedTags[myIndex.toString()] = this.selectedTags;
+            // Update the firestore data after change:
+            transaction.update(ref, { notes: notes });
+            transaction.update(ref, { dates: dates });
+            transaction.update(ref, { selectedTags: selectedTags });
+            this.note = '';
+            this.selectedTags = [];
+          });
+        });
       },
       addSelectedTags(selection) {
         this.selectedTags = selection;
+        return;
       }
-    },
-    components: {
-      Dropdown
     }
   };
 </script>
 
-<style scoped>
+<style>
   .noteContainer {
-    max-width: 100%;
+    max-width: 90%;
   }
 </style>

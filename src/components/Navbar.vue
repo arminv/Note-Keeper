@@ -20,7 +20,11 @@
             <v-list-item-title>Toggle Dark / Light Mode</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link @click="showRegister">
+        <v-list-item
+          v-if="!$store.state.user.loggedIn"
+          link
+          @click="showRegister"
+        >
           <v-list-item-action>
             <v-icon>mdi-settings</v-icon>
           </v-list-item-action>
@@ -32,7 +36,7 @@
           <v-list-item-action>
             <v-icon>mdi-settings</v-icon>
           </v-list-item-action>
-          <v-list-item-content v-if="$store.state.user.data">
+          <v-list-item-content v-if="$store.state.user.loggedIn">
             <v-list-item-title>Sign Out</v-list-item-title>
           </v-list-item-content>
           <v-list-item-content v-else>
@@ -44,8 +48,8 @@
 
     <v-app-bar app clipped-left>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title v-if="$store.state.user.data">
-        Note Keeper App - Hi, {{ $store.state.user.data.displayName }} :)
+      <v-toolbar-title v-if="$store.state.user.loggedIn">
+        Note Keeper App - Hi {{ $store.state.user.data.displayName }} :)
       </v-toolbar-title>
       <v-toolbar-title v-else>
         Note Keeper App
@@ -59,7 +63,7 @@
 
   export default {
     data: () => ({
-      drawer: null
+      drawer: false
     }),
     methods: {
       toggleMode() {
@@ -67,16 +71,13 @@
           ? (this.$vuetify.theme.dark = false)
           : (this.$vuetify.theme.dark = true);
       },
-      created() {
-        this.$vuetify.theme.dark = true;
-      },
       showDashboard() {
-        this.$router.replace({
+        this.$router.push({
           name: 'Dashboard'
         });
       },
       showRegister() {
-        this.$router.replace({
+        this.$router.push({
           name: 'Register'
         });
       },
@@ -85,14 +86,14 @@
           .auth()
           .signOut()
           .then(() => {
-            this.$router.replace({
+            this.$router.push({
               name: 'Login'
             });
           })
           .catch(err => {
             this.error = err.message;
           });
-        // this.$store.dispatch('fetchUser', null);
+        this.$store.dispatch('fetchUser', null);
       }
     }
   };

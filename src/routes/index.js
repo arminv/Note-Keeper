@@ -12,7 +12,15 @@ const router = new Router({
     base: process.env.BASE_URL,
     routes: [{
             path: '/',
-            redirect: '/login'
+            redirect: '/Dashboard'
+        },
+        {
+            path: '/Dashboard',
+            name: 'Dashboard',
+            component: Dashboard,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/login',
@@ -23,14 +31,6 @@ const router = new Router({
             path: '/register',
             name: 'Register',
             component: Register
-        },
-        {
-            path: '/dashboard',
-            name: 'Dashboard',
-            component: Dashboard,
-            meta: {
-                requiresAuth: true
-            }
         }
         // TODO: Add a not found component:
         // ,{

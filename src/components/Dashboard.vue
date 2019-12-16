@@ -2,18 +2,18 @@
   <v-app id="inspire">
     <v-content>
       <v-container class="fill-height" fluid>
-        <h1>Number of Notes : {{ $store.state.counter }}</h1>
-        <v-row align="center" justify="center">
-          <v-col class="shrink"> </v-col>
+        <v-row align="left" justify="center">
+          <h1>Number of Notes : {{ docs.notes.length }}</h1>
         </v-row>
         <v-container fluid>
           <v-container fluid>
             <notes />
             <br />
             <br />
-            <note-entry />
+            <!-- <note-entry /> -->
             <br />
             <br />
+            <tiptap />
           </v-container>
         </v-container>
       </v-container>
@@ -26,15 +26,27 @@
 
 <script>
   import Notes from './Notes.vue';
-  import NoteEntry from './NoteEntry.vue';
+  // import NoteEntry from './NoteEntry.vue';
+  import Tiptap from './Tiptap.vue';
+  import firebase from 'firebase';
+  import { db } from '../main';
 
   export default {
-    props: {
-      source: String
+    data() {
+      return {
+        docs: null,
+        panel: []
+      };
+    },
+    firestore() {
+      return {
+        docs: db.collection('users').doc(firebase.auth().currentUser.uid)
+      };
     },
     components: {
       Notes,
-      NoteEntry
+      // NoteEntry,
+      Tiptap
     }
   };
 </script>

@@ -3,41 +3,47 @@ import Vuex from 'vuex'
 import router from "./routes/index";
 import App from './App.vue'
 import vuetify from './plugins/vuetify';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import {
+  firestorePlugin
+} from 'vuefire'
 
 Vue.config.productionTip = false;
 Vue.use(Vuex)
+Vue.use(firestorePlugin)
 
-// Your web app's Firebase configuration
+// Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCIZmoXdIs7APkuU9f7tHwEhzMNihUVMFs",
-  authDomain: "note-keeper-62195.firebaseapp.com",
-  databaseURL: "https://note-keeper-62195.firebaseio.com",
-  projectId: "note-keeper-62195",
-  storageBucket: "note-keeper-62195.appspot.com",
-  messagingSenderId: "674790015747",
-  appId: "1:674790015747:web:e961e290290472c3661f36",
-  measurementId: "G-9NEGX7ZEW3"
+  // NOTE: Add your own configs here:
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
+// Export db
+export const db = firebase.firestore();
+
+firebase.auth().onAuthStateChanged(user => {
+  store.dispatch("fetchUser", user);
+});
+// TODO: Add realtime bindings between Firebase db and Vuex store via Vuefire (https://vuefire.vuejs.org/vuexfire/getting-started.html):
+
 const state = {
-  notes: [],
-  dates: [],
-  counter: 0,
-  tags: [
-    'JavaScript',
-    'Vue',
-    'Node',
-    'React',
-    'Python',
-    'MongoDB',
-    'Feathers',
-    'Express'
-  ],
-  selectedTags: [],
+  //   notes: [],
+  //   dates: [],
+  //   counter: 0,
+  //   tags: [
+  //     'JavaScript',
+  //     'Vue',
+  //     'Node',
+  //     'React',
+  //     'Python',
+  //     'MongoDB',
+  //     'Feathers',
+  //     'Express'
+  //   ],
+  //   selectedTags: [],
   user: {
     loggedIn: false,
     data: null
@@ -45,29 +51,29 @@ const state = {
 }
 
 const mutations = {
-  ADD_NOTE(state, payload) {
-    let newNote = payload;
-    state.notes.push(newNote);
-    state.counter++;
-  },
-  DELETE_NOTE(state, payload) {
-    let index = payload;
-    state.notes.splice(index, 1);
-    state.dates.splice(index, 1);
-    state.counter--;
-  },
-  ADD_DATE(state, payload) {
-    let newTimeStamp = payload;
-    state.dates.push(newTimeStamp);
-  },
-  ADD_TAG(state, payload) {
-    let tag = payload;
-    state.tags.unshift(tag);
-  },
-  ADD_SELECTED_TAG(state, payload) {
-    let selectedTag = payload;
-    state.selectedTags.push(selectedTag);
-  },
+  //   ADD_NOTE(state, payload) {
+  //     let newNote = payload;
+  //     state.notes.push(newNote);
+  //     state.counter++;
+  //   },
+  //   DELETE_NOTE(state, payload) {
+  //     let index = payload;
+  //     state.notes.splice(index, 1);
+  //     state.dates.splice(index, 1);
+  //     state.counter--;
+  //   },
+  //   ADD_DATE(state, payload) {
+  //     let newTimeStamp = payload;
+  //     state.dates.push(newTimeStamp);
+  //   },
+  //   ADD_TAG(state, payload) {
+  //     let tag = payload;
+  //     state.tags.unshift(tag);
+  //   },
+  //   ADD_SELECTED_TAG(state, payload) {
+  //     let selectedTag = payload;
+  //     state.selectedTags.push(selectedTag);
+  //   },
   SET_LOGGED_IN(state, value) {
     state.user.loggedIn = value;
   },
@@ -77,21 +83,21 @@ const mutations = {
 }
 
 const actions = {
-  addNote(context, payload) {
-    context.commit('ADD_NOTE', payload);
-  },
-  deleteNote(context, payload) {
-    context.commit('DELETE_NOTE', payload);
-  },
-  addDate(context, payload) {
-    context.commit('ADD_DATE', payload);
-  },
-  addTag(context, payload) {
-    context.commit('ADD_TAG', payload);
-  },
-  addSelectedTag(context, payload) {
-    context.commit('ADD_SELECTED_TAG', payload);
-  },
+  //   addNote(context, payload) {
+  //     context.commit('ADD_NOTE', payload);
+  //   },
+  //   deleteNote(context, payload) {
+  //     context.commit('DELETE_NOTE', payload);
+  //   },
+  //   addDate(context, payload) {
+  //     context.commit('ADD_DATE', payload);
+  //   },
+  //   addTag(context, payload) {
+  //     context.commit('ADD_TAG', payload);
+  //   },
+  //   addSelectedTag(context, payload) {
+  //     context.commit('ADD_SELECTED_TAG', payload);
+  //   },
   fetchUser({
     commit
   }, user) {
@@ -110,12 +116,12 @@ const actions = {
 
 const getters = {
   user: state => state.user,
-  getNotes: state => state.notes,
-  getDates: state => state.dates,
-  getTags: state => state.tags,
-  getSelectedTags: state => state.selectedTags,
-  getNoteCount: state => state.notes.length,
-  getCounter: state => state.counter,
+  //   getNotes: state => state.notes,
+  //   getDates: state => state.dates,
+  //   getTags: state => state.tags,
+  //   getSelectedTags: state => state.selectedTags,
+  //   getNoteCount: state => state.notes.length,
+  //   getCounter: state => state.counter,
 }
 
 const store = new Vuex.Store({
@@ -125,30 +131,26 @@ const store = new Vuex.Store({
   getters
 })
 
-firebase.auth().onAuthStateChanged(user => {
-  store.dispatch("fetchUser", user);
-});
-
 new Vue({
   vuetify,
   router,
   store,
-  computed: {
-    notes() {
-      return this.$store.getters.getNotes;
-    },
-    dates() {
-      return this.$store.getters.getDates;
-    },
-    tags() {
-      return this.$store.getters.getTags;
-    },
-    selectedTags() {
-      return this.$store.getters.getTags;
-    },
-    counter() {
-      return this.$store.getters.getCounter;
-    },
-  },
+  // computed: {
+  //   notes() {
+  //     return this.$store.getters.getNotes;
+  //   },
+  //   dates() {
+  //     return this.$store.getters.getDates;
+  //   },
+  //   tags() {
+  //     return this.$store.getters.getTags;
+  //   },
+  //   selectedTags() {
+  //     return this.$store.getters.getTags;
+  //   },
+  //   counter() {
+  //     return this.$store.getters.getCounter;
+  //   },
+  // },
   render: h => h(App)
 }).$mount('#app')
