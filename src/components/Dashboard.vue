@@ -10,7 +10,6 @@
             <notes />
             <br />
             <br />
-            <!-- <note-entry /> -->
             <br />
             <br />
             <tiptap />
@@ -26,7 +25,6 @@
 
 <script>
   import Notes from './Notes.vue';
-  // import NoteEntry from './NoteEntry.vue';
   import Tiptap from './Tiptap.vue';
   import firebase from 'firebase';
   import { db } from '../main';
@@ -45,7 +43,6 @@
     },
     components: {
       Notes,
-      // NoteEntry,
       Tiptap
     }
   };

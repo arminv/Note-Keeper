@@ -1,7 +1,6 @@
 <template>
   <div>
-    <!-- TODO: Add the user's name at the top and delete when signed out: -->
-    <!-- TODO: Find + add better icons: -->
+    <!-- TODO: Find + add better icons for sidebar: -->
     <v-navigation-drawer v-model="drawer" app clipped>
       <v-list dense>
         <v-list-item link @click="showDashboard">

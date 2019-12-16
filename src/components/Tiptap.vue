@@ -8,55 +8,55 @@
           <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
             <div class="menubar">
               <v-btn
-              small
+                small
                 outlined
                 color="primary"
                 :class="{ 'is-active': isActive.bold() }"
                 @click="commands.bold"
-                ><v-icon dark>fas fa-bold</v-icon></v-btn
-              >
+                ><v-icon dark>fas fa-bold</v-icon>
+              </v-btn>
               <v-btn
-              small
+                small
                 outlined
                 color="primary"
                 :class="{ 'is-active': isActive.italic() }"
                 @click="commands.italic"
-                ><v-icon dark>fas fa-italic</v-icon></v-btn
-              >
+                ><v-icon dark>fas fa-italic</v-icon>
+              </v-btn>
               <v-btn
-              small
+                small
                 outlined
                 color="primary"
                 :class="{ 'is-active': isActive.strike() }"
                 @click="commands.strike"
-                ><v-icon dark>fas fa-strikethrough</v-icon></v-btn
-              >
+                ><v-icon dark>fas fa-strikethrough</v-icon>
+              </v-btn>
               <v-btn
-              small
+                small
                 outlined
                 color="primary"
                 :class="{ 'is-active': isActive.underline() }"
                 @click="commands.underline"
-                ><v-icon dark>fas fa-underline</v-icon></v-btn
-              >
+                ><v-icon dark>fas fa-underline</v-icon>
+              </v-btn>
               <v-btn
-              small
+                small
                 outlined
                 color="primary"
                 :class="{ 'is-active': isActive.code() }"
                 @click="commands.code"
-                ><v-icon dark>fas fa-code</v-icon></v-btn
-              >
+                ><v-icon dark>fas fa-code</v-icon>
+              </v-btn>
               <v-btn
-              small
+                small
                 outlined
                 color="primary"
                 :class="{ 'is-active': isActive.paragraph() }"
                 @click="commands.paragraph"
-                ><v-icon dark>fas fa-paragraph</v-icon></v-btn
-              >
+                ><v-icon dark>fas fa-paragraph</v-icon>
+              </v-btn>
               <v-btn
-              small
+                small
                 outlined
                 color="primary"
                 :class="{ 'is-active': isActive.heading({ level: 1 }) }"
@@ -64,7 +64,7 @@
                 >H1</v-btn
               >
               <v-btn
-              small
+                small
                 outlined
                 color="primary"
                 :class="{ 'is-active': isActive.heading({ level: 2 }) }"
@@ -72,7 +72,7 @@
                 >H2</v-btn
               >
               <v-btn
-              small
+                small
                 outlined
                 color="primary"
                 :class="{ 'is-active': isActive.heading({ level: 3 }) }"
@@ -80,46 +80,50 @@
                 >H3</v-btn
               >
               <v-btn
-              small
+                small
                 outlined
                 color="primary"
                 :class="{ 'is-active': isActive.bullet_list() }"
                 @click="commands.bullet_list"
-                ><v-icon dark>fas fa-list-ul</v-icon></v-btn
-              >
+                ><v-icon dark>fas fa-list-ul</v-icon>
+              </v-btn>
               <v-btn
-              small
+                small
                 outlined
                 color="primary"
                 :class="{ 'is-active': isActive.ordered_list() }"
                 @click="commands.ordered_list"
-                ><v-icon dark>fas fa-list-ol</v-icon></v-btn
-              >
+                ><v-icon dark>fas fa-list-ol</v-icon>
+              </v-btn>
               <v-btn
-              small
+                small
                 outlined
                 color="primary"
                 :class="{ 'is-active': isActive.blockquote() }"
                 @click="commands.blockquote"
-                ><v-icon dark>fas fa-quote-right</v-icon></v-btn
-              >
+                ><v-icon dark>fas fa-quote-right</v-icon>
+              </v-btn>
               <v-btn
-              small
+                small
                 outlined
                 color="primary"
                 :class="{ 'is-active': isActive.code_block() }"
                 @click="commands.code_block"
-                ><v-icon dark>fas fa-code</v-icon></v-btn
-              >
-              <v-btn small outlined color="primary" @click="commands.horizontal_rule"
-                ><v-icon dark>fas fa-minus</v-icon></v-btn
-              >
+                ><v-icon dark>fas fa-code</v-icon>
+              </v-btn>
+              <v-btn
+                small
+                outlined
+                color="primary"
+                @click="commands.horizontal_rule"
+                ><v-icon dark>fas fa-minus</v-icon>
+              </v-btn>
               <v-btn small outlined color="primary" @click="commands.undo">
                 <v-icon dark>fas fa-undo</v-icon>
               </v-btn>
               <v-btn small outlined color="primary" @click="commands.redo"
-                ><v-icon dark>fas fa-redo</v-icon></v-btn
-              >
+                ><v-icon dark>fas fa-redo</v-icon>
+              </v-btn>
               <hr />
             </div>
           </editor-menu-bar>
@@ -131,16 +135,9 @@
       <v-btn rounded color="error" dark @click="clearContent">
         Clear Content
       </v-btn>
-      <!-- <v-btn color="primary" @click="setContent">
-        Set Content
-      </v-btn> -->
       <v-btn rounded color="primary" dark @click="createNewNote">
         Add Note
       </v-btn>
-
-      <!-- <div>
-        <div v-html="html"></div>
-      </div> -->
       <br />
       <br />
       <br />
@@ -219,8 +216,7 @@
             new Underline(),
             new History()
           ],
-          content: `
-        `,
+          content: ``,
           onUpdate: ({ getHTML }) => {
             this.html = getHTML();
           }
@@ -236,32 +232,7 @@
         this.editor.clearContent(true);
         this.editor.focus();
       },
-      //   setContent() {
-      //     // you can pass a json document
-      //     this.editor.setContent(
-      //       {
-      //         type: 'doc',
-      //         content: [
-      //           {
-      //             type: 'paragraph',
-      //             content: [
-      //               {
-      //                 type: 'text',
-      //                 text: 'This is some inserted text. 👋'
-      //               }
-      //             ]
-      //           }
-      //         ]
-      //       },
-      //       true
-      //     );
-      //     // HTML string is also supported
-      //     // this.editor.setContent('<p>This is some inserted text. 👋</p>')
-      //     this.editor.focus();
-      //   },
       createNewNote() {
-        /* eslint-disable */
-        console.log(this.html);
         if (this.html === '' || this.html === '<p></p>') {
           this.overlay = true;
           return;

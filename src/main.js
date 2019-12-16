@@ -27,7 +27,7 @@ export const db = firebase.firestore();
 firebase.auth().onAuthStateChanged(user => {
   store.dispatch("fetchUser", user);
 });
-// TODO: Add realtime bindings between Firebase db and Vuex store via Vuefire (https://vuefire.vuejs.org/vuexfire/getting-started.html):
+// TODO: Add realtime bindings between Firebase db and Vuex store via Vuexfire (https://vuefire.vuejs.org/vuexfire/getting-started.html):
 
 const state = {
   //   notes: [],
