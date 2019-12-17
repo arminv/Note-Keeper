@@ -1,8 +1,19 @@
 # Note Keeper App:
 
-NOTE: Add your own Firebase project and configuration in ./src/main.js file.
+NOTE: Add your own Firebase project and its configuration settings inside ./src/main.js file.
 
-I am also using Vuefire to create bindings between the remote db and the app.
+For this project, I have used:
+
+1. [Vuefire], to create bindings between the remote db ([Cloud Firestore]) and the app.
+
+2. [Vuetify], a Vue UI Library for Material Components.
+
+3. [Tiptap], a renderless rich-text editor for Vue.
+
+[Vuefire]: https://vuefire.vuejs.org
+[Cloud Firestore]: https://firebase.google.com/docs/firestore
+[Vuetify]: https://vuetifyjs.com/en/
+[Tiptap]: https://tiptap.scrumpy.io
 
 ## Project setup
 ```
