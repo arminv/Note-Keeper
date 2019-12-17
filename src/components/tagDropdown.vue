@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="noteContainer">
+  <v-container fluid class="tagContainer">
     <div class="text-center d-flex pb-4">
       <v-form ref="form">
         <v-text-field
@@ -149,7 +149,7 @@
 </script>
 
 <style scoped>
-  .noteContainer {
-    max-width: 50%;
+  .tagContainer {
+    max-width: 500px;
   }
 </style>

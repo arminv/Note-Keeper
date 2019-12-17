@@ -124,6 +124,7 @@
 
 <style scoped>
   .noteContainer {
-    max-width: 90%;
+    min-width: 90%;
+    min-height: 90%;
   }
 </style>

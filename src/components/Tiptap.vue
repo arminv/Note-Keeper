@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container fluid class="noteContainer">
+    <v-container fluid class="tiptapContainer">
       <dropdown v-on:selectionListen="addSelectedTags"></dropdown>
       <br />
       <div class="editor">
@@ -269,4 +269,9 @@
   };
 </script>
 
-<style></style>
+<style>
+.tiptapContainer {
+  min-width: 90%;
+  min-height: 90%;
+}
+</style>

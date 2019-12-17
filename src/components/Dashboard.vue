@@ -3,7 +3,7 @@
     <v-content>
       <v-container class="fill-height" fluid>
         <v-row align="left" justify="center">
-          <h1>Number of Notes : {{ docs.notes.length }}</h1>
+          <h3>Number of Notes : {{ docs.notes.length }}</h3>
         </v-row>
         <v-container fluid>
           <v-container fluid>
