@@ -1,11 +1,11 @@
 <template>
-  <v-form v-model="valid" @submit.prevent="submit">
+  <v-form v-model="valid" @submit.prevent="submit" class="form">
+    <!-- <br />
     <br />
     <br />
     <br />
     <br />
-    <br />
-    <br />
+    <br /> -->
     <v-container>
       <div v-if="error">
         <label>
@@ -44,42 +44,47 @@
 </template>
 
 <script>
-  import firebase from 'firebase';
+import firebase from 'firebase';
 
-  export default {
-    data() {
-      return {
-        error: null,
-        show1: false,
-        form: {
-          password: '',
-          email: ''
-        },
-        rules: {
-          required: value => !!value || 'Required.'
-          // emailMatch: () => "The email and password you entered don't match"
-        },
-        valid: false,
-        emailRules: [
-          v => !!v || 'E-mail is required',
-          v => /.+@.+/.test(v) || 'E-mail must be valid'
-        ]
-      };
+export default {
+  data() {
+    return {
+      error: null,
+      show1: false,
+      form: {
+        password: '',
+        email: '',
+      },
+      rules: {
+        required: (value) => !!value || 'Required.',
+        // emailMatch: () => "The email and password you entered don't match"
+      },
+      valid: false,
+      emailRules: [
+        (v) => !!v || 'E-mail is required',
+        (v) => /.+@.+/.test(v) || 'E-mail must be valid',
+      ],
+    };
+  },
+  methods: {
+    submit() {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.form.email, this.form.password)
+        .then(() => {
+          this.$router.replace({ name: 'Dashboard' });
+        })
+        .catch((err) => {
+          this.error = err.message;
+        });
     },
-    methods: {
-      submit() {
-        firebase
-          .auth()
-          .signInWithEmailAndPassword(this.form.email, this.form.password)
-          .then(() => {
-            this.$router.replace({ name: 'Dashboard' });
-          })
-          .catch(err => {
-            this.error = err.message;
-          });
-      }
-    }
-  };
+  },
+};
 </script>
 
-<style></style>
+<style>
+.form {
+  margin-top: 70px;
+  margin-left: 50px;
+}
+</style>

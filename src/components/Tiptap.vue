@@ -124,7 +124,6 @@
               <v-btn small outlined color="primary" @click="commands.redo"
                 ><v-icon dark>fas fa-redo</v-icon>
               </v-btn>
-              <hr />
             </div>
           </editor-menu-bar>
 
@@ -132,18 +131,18 @@
         </v-card>
       </div>
 
-      <v-btn rounded color="error" dark @click="clearContent">
-        Clear Content
-      </v-btn>
       <v-btn rounded color="primary" dark @click="createNewNote">
-        Add Note
+        Add
       </v-btn>
-      <br />
+      <v-btn rounded color="error" dark @click="clearContent">
+        Clear
+      </v-btn>
+      <!-- <br />
       <br />
       <br />
       <v-row justify="center">
         <v-date-picker v-model="date">Pick A Date For The Note</v-date-picker>
-      </v-row>
+      </v-row> -->
 
       <v-overlay :value="overlay" opacity="0.90" dark>
         <v-btn icon @click="overlay = false">
@@ -160,118 +159,121 @@
 </template>
 
 <script>
-  import firebase from 'firebase';
-  import { db } from '../main';
-  import Dropdown from './tagDropdown.vue';
-  import { Editor, EditorContent, EditorMenuBar } from 'tiptap';
-  import {
-    Blockquote,
-    CodeBlock,
-    HardBreak,
-    Heading,
-    HorizontalRule,
-    OrderedList,
-    BulletList,
-    ListItem,
-    TodoItem,
-    TodoList,
-    Bold,
-    Code,
-    Italic,
-    Link,
-    Strike,
-    Underline,
-    History
-  } from 'tiptap-extensions';
-  export default {
-    components: {
-      EditorContent,
-      EditorMenuBar,
-      Dropdown
+import firebase from 'firebase';
+import { db } from '../main';
+import Dropdown from './tagDropdown.vue';
+import { Editor, EditorContent, EditorMenuBar } from 'tiptap';
+import {
+  Blockquote,
+  CodeBlock,
+  HardBreak,
+  Heading,
+  HorizontalRule,
+  OrderedList,
+  BulletList,
+  ListItem,
+  TodoItem,
+  TodoList,
+  Bold,
+  Code,
+  Italic,
+  Link,
+  Strike,
+  Underline,
+  History,
+} from 'tiptap-extensions';
+export default {
+  components: {
+    EditorContent,
+    EditorMenuBar,
+    Dropdown,
+  },
+  firestore() {
+    return {
+      docs: db.collection('users').doc(firebase.auth().currentUser.uid),
+    };
+  },
+  data() {
+    return {
+      editor: new Editor({
+        extensions: [
+          new Blockquote(),
+          new BulletList(),
+          new CodeBlock(),
+          new HardBreak(),
+          new Heading({ levels: [1, 2, 3] }),
+          new HorizontalRule(),
+          new ListItem(),
+          new OrderedList(),
+          new TodoItem(),
+          new TodoList(),
+          new Link(),
+          new Bold(),
+          new Code(),
+          new Italic(),
+          new Strike(),
+          new Underline(),
+          new History(),
+        ],
+        content: ``,
+        onUpdate: ({ getHTML }) => {
+          this.html = getHTML();
+        },
+      }),
+      html: '',
+      date: new Date().toISOString().substr(0, 10),
+      selectedTags: [],
+      overlay: false,
+    };
+  },
+  methods: {
+    clearContent() {
+      this.editor.clearContent(true);
+      this.editor.focus();
     },
-    firestore() {
-      return {
-        docs: db.collection('users').doc(firebase.auth().currentUser.uid)
-      };
-    },
-    data() {
-      return {
-        editor: new Editor({
-          extensions: [
-            new Blockquote(),
-            new BulletList(),
-            new CodeBlock(),
-            new HardBreak(),
-            new Heading({ levels: [1, 2, 3] }),
-            new HorizontalRule(),
-            new ListItem(),
-            new OrderedList(),
-            new TodoItem(),
-            new TodoList(),
-            new Link(),
-            new Bold(),
-            new Code(),
-            new Italic(),
-            new Strike(),
-            new Underline(),
-            new History()
-          ],
-          content: ``,
-          onUpdate: ({ getHTML }) => {
-            this.html = getHTML();
-          }
-        }),
-        html: '',
-        date: new Date().toISOString().substr(0, 10),
-        selectedTags: [],
-        overlay: false
-      };
-    },
-    methods: {
-      clearContent() {
-        this.editor.clearContent(true);
-        this.editor.focus();
-      },
-      createNewNote() {
-        if (this.html === '' || this.html === '<p></p>') {
-          this.overlay = true;
-          return;
-        }
-        let ref = db.collection('users').doc(firebase.auth().currentUser.uid);
-        return db.runTransaction(transaction => {
-          return transaction.get(ref).then(doc => {
-            const notes = doc.data().notes;
-            const dates = doc.data().dates;
-            const selectedTags = doc.data().selectedTags;
-            notes.push(this.html);
-            dates.push(this.date);
-            let myIndex = Object.keys(this.docs.selectedTags).length;
-            selectedTags[myIndex.toString()] = this.selectedTags;
-            // Update the firestore data after change:
-            transaction.update(ref, { notes: notes });
-            transaction.update(ref, { dates: dates });
-            transaction.update(ref, { selectedTags: selectedTags });
-            this.html = '';
-            this.editor.clearContent(true);
-            this.selectedTags = [];
-            return;
-          });
-        });
-      },
-      addSelectedTags(selection) {
-        this.selectedTags = selection;
+    createNewNote() {
+      if (this.html === '' || this.html === '<p></p>') {
+        this.overlay = true;
         return;
-      },
-      beforeDestroy() {
-        this.editor.destroy();
       }
-    }
-  };
+      let ref = db.collection('users').doc(firebase.auth().currentUser.uid);
+      return db.runTransaction((transaction) => {
+        return transaction.get(ref).then((doc) => {
+          const notes = doc.data().notes;
+          const dates = doc.data().dates;
+          const selectedTags = doc.data().selectedTags;
+          notes.push(this.html);
+          dates.push(this.date);
+          let myIndex = Object.keys(this.docs.selectedTags).length;
+          selectedTags[myIndex.toString()] = this.selectedTags;
+          // Update the firestore data after change:
+          transaction.update(ref, { notes: notes });
+          transaction.update(ref, { dates: dates });
+          transaction.update(ref, { selectedTags: selectedTags });
+          this.html = '';
+          this.editor.clearContent(true);
+          this.selectedTags = [];
+          return;
+        });
+      });
+    },
+    addSelectedTags(selection) {
+      this.selectedTags = selection;
+      return;
+    },
+    beforeDestroy() {
+      this.editor.destroy();
+    },
+  },
+};
 </script>
 
 <style>
+.ProseMirror {
+  min-height: 30vh !important;
+}
+
 .tiptapContainer {
-  min-width: 90%;
-  min-height: 90%;
+  max-width: 70%;
 }
 </style>

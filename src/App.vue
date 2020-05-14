@@ -1,22 +1,26 @@
 <template>
   <div>
-    <navbar></navbar>
+    <Navbar />
     <main class="py-4">
-      <router-view></router-view>
+      <router-view>
+        <Dashboard />
+      </router-view>
     </main>
   </div>
 </template>
 
 <script>
-  import navbar from './components/Navbar';
-  export default {
-    methods: {
-      created() {
-        this.$vuetify.theme.dark = true;
-      }
+import Navbar from './components/Navbar';
+import Dashboard from './components/Dashboard';
+export default {
+  methods: {
+    created() {
+      this.$vuetify.theme.dark = true;
     },
-    components: {
-      navbar
-    }
-  };
+  },
+  components: {
+    Navbar,
+    Dashboard
+  },
+};
 </script>

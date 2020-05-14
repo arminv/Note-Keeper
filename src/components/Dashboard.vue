@@ -7,12 +7,12 @@
         </v-row>
         <v-container fluid>
           <v-container fluid>
-            <notes />
+            <Notes />
             <br />
             <br />
             <br />
             <br />
-            <tiptap />
+            <Tiptap />
           </v-container>
         </v-container>
       </v-container>
@@ -24,32 +24,32 @@
 </template>
 
 <script>
-  import Notes from './Notes.vue';
-  import Tiptap from './Tiptap.vue';
-  import firebase from 'firebase';
-  import { db } from '../main';
+import Notes from './Notes.vue';
+import Tiptap from './Tiptap.vue';
+import firebase from 'firebase';
+import { db } from '../main';
 
-  export default {
-    data() {
-      return {
-        docs: null,
-        panel: []
-      };
-    },
-    firestore() {
-      return {
-        docs: db.collection('users').doc(firebase.auth().currentUser.uid)
-      };
-    },
-    components: {
-      Notes,
-      Tiptap
-    }
-  };
+export default {
+  data() {
+    return {
+      docs: null,
+      panel: [],
+    };
+  },
+  firestore() {
+    return {
+      docs: db.collection('users').doc(firebase.auth().currentUser.uid),
+    };
+  },
+  components: {
+    Notes,
+    Tiptap,
+  },
+};
 </script>
 
 <style>
-  #inspire {
-    background: url('../assets/background_1.jpg') center center;
-  }
+#inspire {
+  /* background: url('../assets/background_1.jpg') center center; */
+}
 </style>

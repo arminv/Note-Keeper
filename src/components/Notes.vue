@@ -61,70 +61,70 @@
 </template>
 
 <script>
-  import firebase from 'firebase';
-  import { db } from '../main';
+import firebase from 'firebase';
+import { db } from '../main';
 
-  export default {
-    data() {
-      return {
-        popout: true,
-        docs: null,
-        panel: []
-      };
-    },
-    firestore() {
-      return {
-        docs: db.collection('users').doc(firebase.auth().currentUser.uid)
-      };
-    },
-    methods: {
-      deleteNote(index) {
-        let ref = db.collection('users').doc(firebase.auth().currentUser.uid);
-        return db.runTransaction(transaction => {
-          return transaction.get(ref).then(doc => {
-            const notes = doc.data().notes;
-            const dates = doc.data().dates;
-            const selectedTags = doc.data().selectedTags;
-            // Start deleting items:
-            notes.splice(index, 1);
-            dates.splice(index, 1);
-            // For tags, we need to reset the object keys for all indexes to match:
-            delete selectedTags[index.toString()];
-            let selLength = Object.keys(selectedTags).length;
-            let selValues = Object.keys(selectedTags).map(i => selectedTags[i]);
-            let newSelectedTags = {};
-            for (var i = 0; i < selLength; i++) {
-              newSelectedTags[i] = selValues[i];
-            }
-            // Update the firestore data after change:
-            transaction.update(ref, { notes: notes });
-            transaction.update(ref, { dates: dates });
-            transaction.update(ref, { selectedTags: newSelectedTags });
-          });
+export default {
+  data() {
+    return {
+      popout: true,
+      docs: null,
+      panel: [],
+    };
+  },
+  firestore() {
+    return {
+      docs: db.collection('users').doc(firebase.auth().currentUser.uid),
+    };
+  },
+  methods: {
+    deleteNote(index) {
+      let ref = db.collection('users').doc(firebase.auth().currentUser.uid);
+      return db.runTransaction((transaction) => {
+        return transaction.get(ref).then((doc) => {
+          const notes = doc.data().notes;
+          const dates = doc.data().dates;
+          const selectedTags = doc.data().selectedTags;
+          // Start deleting items:
+          notes.splice(index, 1);
+          dates.splice(index, 1);
+          // For tags, we need to reset the object keys for all indexes to match:
+          delete selectedTags[index.toString()];
+          let selLength = Object.keys(selectedTags).length;
+          let selValues = Object.keys(selectedTags).map((i) => selectedTags[i]);
+          let newSelectedTags = {};
+          for (var i = 0; i < selLength; i++) {
+            newSelectedTags[i] = selValues[i];
+          }
+          // Update the firestore data after change:
+          transaction.update(ref, { notes: notes });
+          transaction.update(ref, { dates: dates });
+          transaction.update(ref, { selectedTags: newSelectedTags });
         });
-      },
-      // Expand all notes:
-      all() {
-        this.panel = [...Array(this.docs.notes.length).keys()].map((k, i) => i);
-      },
-      // Collapse all notes:
-      none() {
-        this.panel = [];
-      }
-    }
-    // created() {
-    //   db.collection('users')
-    //     .doc(firebase.auth().currentUser.uid)
-    //     .onSnapshot(snapshot => {
-    //       this.docs = snapshot.data();
-    //     });
-    // }
-  };
+      });
+    },
+    // Expand all notes:
+    all() {
+      this.panel = [...Array(this.docs.notes.length).keys()].map((k, i) => i);
+    },
+    // Collapse all notes:
+    none() {
+      this.panel = [];
+    },
+  },
+  // created() {
+  //   db.collection('users')
+  //     .doc(firebase.auth().currentUser.uid)
+  //     .onSnapshot(snapshot => {
+  //       this.docs = snapshot.data();
+  //     });
+  // }
+};
 </script>
 
 <style scoped>
-  .noteContainer {
-    min-width: 90%;
-    min-height: 90%;
-  }
+.noteContainer {
+  max-width: 70%;
+  /* min-height: 90%; */
+}
 </style>

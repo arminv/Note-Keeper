@@ -1,17 +1,15 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import router from "./routes/index";
-import App from './App.vue'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import router from './routes/index';
+import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import {
-  firestorePlugin
-} from 'vuefire'
+import { firestorePlugin } from 'vuefire';
 
 Vue.config.productionTip = false;
-Vue.use(Vuex)
-Vue.use(firestorePlugin)
+Vue.use(Vuex);
+Vue.use(firestorePlugin);
 
 // Firebase configuration
 const firebaseConfig = {
@@ -24,8 +22,8 @@ firebase.analytics();
 // Export db
 export const db = firebase.firestore();
 
-firebase.auth().onAuthStateChanged(user => {
-  store.dispatch("fetchUser", user);
+firebase.auth().onAuthStateChanged((user) => {
+  store.dispatch('fetchUser', user);
 });
 // TODO: Add realtime bindings between Firebase db and Vuex store via Vuexfire (https://vuefire.vuejs.org/vuexfire/getting-started.html):
 
@@ -46,9 +44,9 @@ const state = {
   //   selectedTags: [],
   user: {
     loggedIn: false,
-    data: null
-  }
-}
+    data: null,
+  },
+};
 
 const mutations = {
   //   ADD_NOTE(state, payload) {
@@ -79,8 +77,8 @@ const mutations = {
   },
   SET_USER(state, data) {
     state.user.data = data;
-  }
-}
+  },
+};
 
 const actions = {
   //   addNote(context, payload) {
@@ -98,38 +96,36 @@ const actions = {
   //   addSelectedTag(context, payload) {
   //     context.commit('ADD_SELECTED_TAG', payload);
   //   },
-  fetchUser({
-    commit
-  }, user) {
-    commit("SET_LOGGED_IN", user !== null);
+  fetchUser({ commit }, user) {
+    commit('SET_LOGGED_IN', user !== null);
 
     if (user) {
-      commit("SET_USER", {
+      commit('SET_USER', {
         displayName: user.displayName,
-        email: user.email
+        email: user.email,
       });
     } else {
-      commit("SET_USER", null);
+      commit('SET_USER', null);
     }
-  }
-}
+  },
+};
 
 const getters = {
-  user: state => state.user,
+  user: (state) => state.user,
   //   getNotes: state => state.notes,
   //   getDates: state => state.dates,
   //   getTags: state => state.tags,
   //   getSelectedTags: state => state.selectedTags,
   //   getNoteCount: state => state.notes.length,
   //   getCounter: state => state.counter,
-}
+};
 
 const store = new Vuex.Store({
   state,
   mutations,
   actions,
-  getters
-})
+  getters,
+});
 
 new Vue({
   vuetify,
@@ -152,5 +148,5 @@ new Vue({
   //     return this.$store.getters.getCounter;
   //   },
   // },
-  render: h => h(App)
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount('#app');

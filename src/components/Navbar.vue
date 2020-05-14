@@ -58,44 +58,44 @@
 </template>
 
 <script>
-  import firebase from 'firebase';
+import firebase from 'firebase';
 
-  export default {
-    data: () => ({
-      drawer: false
-    }),
-    methods: {
-      toggleMode() {
-        this.$vuetify.theme.dark === true
-          ? (this.$vuetify.theme.dark = false)
-          : (this.$vuetify.theme.dark = true);
-      },
-      showDashboard() {
-        this.$router.push({
-          name: 'Dashboard'
-        });
-      },
-      showRegister() {
-        this.$router.push({
-          name: 'Register'
-        });
-      },
-      signOut() {
-        firebase
-          .auth()
-          .signOut()
-          .then(() => {
-            this.$router.push({
-              name: 'Login'
-            });
-          })
-          .catch(err => {
-            this.error = err.message;
+export default {
+  data: () => ({
+    drawer: false,
+  }),
+  methods: {
+    toggleMode() {
+      this.$vuetify.theme.dark === true
+        ? (this.$vuetify.theme.dark = false)
+        : (this.$vuetify.theme.dark = true);
+    },
+    showDashboard() {
+      this.$router.push({
+        name: 'Dashboard',
+      });
+    },
+    showRegister() {
+      this.$router.push({
+        name: 'Register',
+      });
+    },
+    signOut() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.push({
+            name: 'Login',
           });
-        this.$store.dispatch('fetchUser', null);
-      }
-    }
-  };
+        })
+        .catch((err) => {
+          this.error = err.message;
+        });
+      this.$store.dispatch('fetchUser', null);
+    },
+  },
+};
 </script>
 
 <style></style>

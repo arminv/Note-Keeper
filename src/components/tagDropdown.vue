@@ -84,72 +84,72 @@
 </template>
 
 <script>
-  import firebase from 'firebase';
-  import { db } from '../main';
+import firebase from 'firebase';
+import { db } from '../main';
 
-  export default {
-    data: () => ({
-      docs: null,
-      newTag: '',
-      selectedTag: [],
-      outlined: true,
-      rounded: true,
-      overlay: false
-    }),
-    firestore() {
-      return {
-        docs: db.collection('users').doc(firebase.auth().currentUser.uid)
-      };
+export default {
+  data: () => ({
+    docs: null,
+    newTag: '',
+    selectedTag: [],
+    outlined: true,
+    rounded: true,
+    overlay: false,
+  }),
+  firestore() {
+    return {
+      docs: db.collection('users').doc(firebase.auth().currentUser.uid),
+    };
+  },
+  computed: {
+    likesAllLang() {
+      return this.selectedTag.length === this.docs.tags.length;
     },
-    computed: {
-      likesAllLang() {
-        return this.selectedTag.length === this.docs.tags.length;
-      },
-      likesSomeLang() {
-        return this.selectedTag.length > 0 && !this.likesAllLang;
-      },
-      icon() {
-        if (this.likesAllLang) return 'mdi-close-box';
-        if (this.likesSomeLang) return 'mdi-minus-box';
-        return 'mdi-checkbox-blank-outline';
-      }
+    likesSomeLang() {
+      return this.selectedTag.length > 0 && !this.likesAllLang;
     },
-    methods: {
-      toggle() {
-        this.$nextTick(() => {
-          if (this.likesAllLang) {
-            this.selectedTag = [];
-          } else {
-            this.selectedTag = this.docs.tags.slice();
-          }
-          this.emitSelection(this.selectedTag);
-        });
-      },
-      createNewTag() {
-        if (this.newTag === '') {
-          this.overlay = true;
-          return;
+    icon() {
+      if (this.likesAllLang) return 'mdi-close-box';
+      if (this.likesSomeLang) return 'mdi-minus-box';
+      return 'mdi-checkbox-blank-outline';
+    },
+  },
+  methods: {
+    toggle() {
+      this.$nextTick(() => {
+        if (this.likesAllLang) {
+          this.selectedTag = [];
+        } else {
+          this.selectedTag = this.docs.tags.slice();
         }
-        let ref = db.collection('users').doc(firebase.auth().currentUser.uid);
-        return db.runTransaction(transaction => {
-          return transaction.get(ref).then(doc => {
-            const tags = doc.data().tags;
-            tags.unshift(this.newTag);
-            // Update the firestore data after change:
-            transaction.update(ref, { tags: tags });
-            this.newTag = '';
-          });
-        });
-      },
-      emitSelection(selectedTag) {
-        this.$emit('selectionListen', selectedTag);
+        this.emitSelection(this.selectedTag);
+      });
+    },
+    createNewTag() {
+      if (this.newTag === '') {
+        this.overlay = true;
+        return;
       }
-    }
-  };
+      let ref = db.collection('users').doc(firebase.auth().currentUser.uid);
+      return db.runTransaction((transaction) => {
+        return transaction.get(ref).then((doc) => {
+          const tags = doc.data().tags;
+          tags.unshift(this.newTag);
+          // Update the firestore data after change:
+          transaction.update(ref, { tags: tags });
+          this.newTag = '';
+        });
+      });
+    },
+    emitSelection(selectedTag) {
+      this.$emit('selectionListen', selectedTag);
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .tagContainer {
-    max-width: 500px;
-  }
+.tagContainer {
+  /* max-width: 500px; */
+}
 </style>
