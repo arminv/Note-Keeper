@@ -10,7 +10,7 @@
   "dependencies": {
     "core-js": "^3.3.2",
     "dns": "^0.2.2",
-    "firebase": "^7.5.2",
+    "firebase": "^10.9.0",
     "firebase-admin": "^8.8.0",
     "http2": "^3.3.7",
     "tiptap": "^1.26.6",
